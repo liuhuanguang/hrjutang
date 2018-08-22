@@ -178,6 +178,8 @@ return [
         App\Providers\RouteServiceProvider::class,
         //数据转换器
         //Cyvelnet\Laravel5Fractal\Laravel5FractalServiceProvider::class,
+        //二维码
+        SimpleSoftwareIO\QrCode\QrCodeServiceProvider::class
 
     ],
 
@@ -229,6 +231,8 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
         //数据转换器
         //'Fractal' => Cyvelnet\Laravel5Fractal\Facades\Fractal::class,
+        //二维码
+        'QrCode' => SimpleSoftwareIO\QrCode\Facades\QrCode::class
 
     ],
 
