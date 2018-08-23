@@ -14,3 +14,24 @@
 Route::get('/', function () {
     return view('welcome');
 });
+
+/**
+ * 用户模块
+ */
+Route::group(['prefix'=>'user'],function (){
+    Route::get('/index', '\Modules\User\Http\Controllers\UserController@index');
+});
+
+/**
+ * 商品模块
+ */
+Route::group(['prefix'=>'goods'],function (){
+    Route::get('/index', '\Modules\User\Http\Controllers\goodsController@index');
+});
+
+/**
+ * 经销商模块
+ */
+Route::group(['prefix'=>'distributor'],function (){
+    Route::get('/index', '\Modules\User\Http\Controllers\goodsController@index');
+});
