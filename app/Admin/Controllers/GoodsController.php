@@ -12,7 +12,9 @@ use Encore\Admin\Layout\Content;
 use Encore\Admin\Show;
 use App\Admin\Extensions\Tools\MyButton;
 use Encore\Admin\Auth\Permission;
-
+use Encore\Admin\Widgets\Tab;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Database\Eloquent\Model;
 class GoodsController extends Controller
 {
     use ModelForm;
@@ -106,36 +108,31 @@ class GoodsController extends Controller
             $grid->goods_name('商品名称');
             $grid->goods_sn('商品编号');
             $grid->goods_category_id('商品分类');
+            $grid->specification('简单描述');
+            $grid->market_price('市场价');
+            $grid->goods_price('本店价');
+            $grid->goods_number('库存');
+//            $grid->goods_desc('详细描述');
+            $grid->goods_images('商品图片')->sortable();
+            $grid->goods_type('商品类型');
             //是否显示
             $grid->sort('排序')->sortable();
-            $grid->is_del('是否删除')->display(function ($released) {
-                return $released ? '是' : '否';
-            })->sortable();
+
             $grid->is_show('上架')->display(function ($released) {
                 return $released ? '是' : '否';
             })->sortable();
-            $grid->shop_id('所属商家');
-            $grid->spu_count('spu销量')->sortable();
-            $grid->goods_comment('评论数')->sortable();
-            $grid->goods_images('图片')->sortable();
-//            $grid->tools(function($tools){
-//                $url = "/admin/artimage";
-//                $icon = "fa-backward";
-//                $text = "返回";
-//                $tools->append(new MyButton($url,$icon,$text));
-//            });
+            $grid->created_at('创建时间')->sortable();
+            $grid->updated_at('更新时间')->sortable();
             /**
              * 筛选
              */
-            $grid->filter(function($filter){
+            $grid->filter(function ($filter) {
 
                 // 去掉默认的id过滤器
                 $filter->disableIdFilter();
                 // 在这里添加字段过滤器
                 $filter->like('goods_name', '商品名称');
-                $filter->like('goods_sn', '商品编号');
             });
-            $grid->updated_at('更新时间')->sortable();
         });
     }
 
@@ -147,17 +144,35 @@ class GoodsController extends Controller
     protected function form()
     {
         return Admin::form(Goods::class, function (Form $form) {
-
+            $form->tab('基本信息', function ($form) {
+                $form->text('goods_name', '商品名称')->rules('required');
+                $form->text('goods_sn', '商品货号');
+                $form->select('goods_category_id', '商品分类')->options('/admin/catlist');
+                $form->textarea('specification', '简单描述');
+                $form->text('market_price', '市场价');
+                $form->text('goods_price', '本店价');
+                $form->text('goods_number', '库存');
+                $form->image('goods_images','商品图片')->uniqueName()->move('public/upload/image');
+                $form->editor('goods_desc', '详细内容');
+                $form->number('sort', '排序');
+                $form->switch('is_show', '是否上架')->rules('required');
+            })->tab('商品类型', function ($form) {
+                $form->select('goods_type', '商品类型')->options('/admin/Goodstype');
+            });
             $form->display('id', 'ID');
-            $form->text('title', '标题')->rules('required');
-            $form->textarea('desc', '简介')->rules('required');
-            $form->number('sort','排序');
-            $form->editor('centent', '内容')->rules('required|min:3');
-            $form->select('category_id','文章分类')->options('/admin/AjaxCategory')->rules('required');
-            $form->switch('is_del', '是否启用')->rules('required');
             $form->display('created_at', 'Created At');
             $form->display('updated_at', 'Updated At');
+            $form->saving(function (Form $form) {
+                if(empty($form->goods_sn)) {
+                    $max_id = Db::table('goods')->max('id')+1;
+                    $form->goods_sn="juhetang" . str_pad($max_id, 7, "0", STR_PAD_LEFT);
+                    }
+
+            });
+
+
         });
+
     }
 }
 
