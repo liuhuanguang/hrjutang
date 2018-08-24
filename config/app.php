@@ -182,6 +182,8 @@ return [
         SimpleSoftwareIO\QrCode\QrCodeServiceProvider::class,
         //模块话
         Nwidart\Modules\LaravelModulesServiceProvider::class,
+        //微信模块
+        Overtrue\LaravelWeChat\ServiceProvider::class,
 
     ],
 
@@ -237,7 +239,8 @@ return [
         'QrCode' => SimpleSoftwareIO\QrCode\Facades\QrCode::class,
         //模块话
         'Module' => Nwidart\Modules\Facades\Module::class,
-
+        //微信模块
+        'EasyWeChat' => Overtrue\LaravelWeChat\Facade::class,
     ],
 
 ];
