@@ -20,4 +20,8 @@ Route::group([
     $router->resource('GoodsCategory', GoodsCategoryController::class); //商品分类列表
     $router->resource('Bis', BisController::class); //经销商列表
     $router->resource('BisOrder', BisOrderController::class); //经销商账单
+    $router->resource('answer', AnswerController::class); //问卷调查问题
+    $router->resource('investigation', InvestigationController::class); //问卷调查答案
+    $router->resource('AjaxAnswer', AjaxAnswer::class); //问卷调查答案
+    $router->resource('useranswer', UserAnswerController::class); //用户回答
 });
